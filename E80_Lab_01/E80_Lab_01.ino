@@ -1,5 +1,10 @@
 /********
 Default E80 Code
+Team:
+    Bowen
+    Diana
+    Ilona
+    Weston
 Current Author:
     Wilson Ives (wives@g.hmc.edu) '20 (contributed in 2018)
 Previous Contributors:
@@ -74,11 +79,43 @@ void loop() {
   //       void motorDriver.drive(int motorA_power,int motorB_power,int motorC_power); 
   // the value of motorX_power can range from -255 to 255, and sets the PWM applied to the motor 
   // The following example will turn on motor B for four seconds between seconds 4 and 8 
-  if (currentTime > 4000 && currentTime <8000) {
-    motorDriver.drive(0,120,0);
-  } else {
+
+  // Example Code
+  // if (currentTime > 4000 && currentTime <8000) {
+  //   motorDriver.drive(0,120,0);
+  // } else {
+  //   motorDriver.drive(0,0,0);
+  // }
+
+  if (currentTime < 2000) {
+    // off for 2 sec
     motorDriver.drive(0,0,0);
+
+  } else if ( currentTime < 4000 ){
+    // vertical motor
+    motorDriver.drive(255, 0, 0);
+
+  } else if ( currentTime < 6000 ){
+    // off
+    motorDriver.drive(0, 0, 0);
+
+  } else if ( currentTime < 8000 ){
+    // port motor
+    motorDriver.drive(0, 255, 0);
+
+  } else if ( currentTime < 10000 ){
+    // off
+    motorDriver.drive(0, 0, 0);
+
+  } else if ( currentTime < 12000 ){
+    // starboard motor
+    motorDriver.drive(0, 0, 255);
+    
+  } else {
+    // off
+    motorDriver.drive(0, 0 , 0);
   }
+
 
   // DONT CHANGE CODE BELOW THIS LINE 
   // --------------------------------------------------------------------------
