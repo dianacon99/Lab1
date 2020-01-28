@@ -26,6 +26,9 @@ Previous Contributors:
 #include <Logger.h>
 #include <Printer.h>
 
+// Motor Test:1 
+// Tank Test: 0
+#define TEST 1
 
 /* Global Variables */
 
@@ -48,6 +51,9 @@ Printer printer;
 // loop start recorder
 int loopStartTime;
 
+void motorTest();
+void tankTest();
+
 void setup() {
   printer.init();
 
@@ -67,25 +73,11 @@ void setup() {
   loopStartTime = millis();
 }
 
-
-void loop() {
+#if TEST
+void motorTest(){
+  // Program to test the 3 motors
 
   int currentTime = millis() - loopStartTime;
-  
-  ///////////  Don't change code above here! ////////////////////
-  // write code here to make the robot fire its motors in the sequence specified in the lab manual 
-  // the currentTime variable contains the number of ms since the robot was turned on 
-  // The motorDriver.drive function takes in 3 inputs arguments motorA_power, motorB_power, motorC_power: 
-  //       void motorDriver.drive(int motorA_power,int motorB_power,int motorC_power); 
-  // the value of motorX_power can range from -255 to 255, and sets the PWM applied to the motor 
-  // The following example will turn on motor B for four seconds between seconds 4 and 8 
-
-  // Example Code
-  // if (currentTime > 4000 && currentTime <8000) {
-  //   motorDriver.drive(0,120,0);
-  // } else {
-  //   motorDriver.drive(0,0,0);
-  // }
 
   if (currentTime < 2000) {
     // off for 2 sec
@@ -110,16 +102,83 @@ void loop() {
   } else if ( currentTime < 12000 ){
     // starboard motor
     motorDriver.drive(0, 0, 255);
-    
+
   } else {
     // off
     motorDriver.drive(0, 0 , 0);
   }
+}
+#else
+void tankTest() {
+  // Program to be run for the tank test
 
+  int waitTime = 15000;
+  int forwardTime1 = 3000 + waitTime;
+  int raiseTime1 = 2000 + forwardTime1;
+  int forwardTime2 = 3000 + raiseTime1;
+  int raiseTime2 = 2000 + forwardTime2;
+  int forwardTime3 = 3000 + raiseTime2;
+
+  int currentTime = millis() - loopStartTime;
+  if (currentTime < waitTime) {
+      // wait with motors off
+      motorDriver.drive(0,0,0);
+
+    } else if ( currentTime < forwardTime1 ){
+      // move forward
+      motorDriver.drive(255, 0, 0);
+
+    } else if ( currentTime < raiseTime1 ){
+      // rise
+      motorDriver.drive(0, 0, 0);
+
+    } else if ( currentTime < forwardTime2 ){
+      // move forward
+      motorDriver.drive(0, 255, 0);
+
+    } else if ( currentTime < raiseTime2 ){
+      // rise
+      motorDriver.drive(0, 0, 0);
+
+    } else if ( currentTime < forwardTime3 ){
+      // move forward
+      motorDriver.drive(0, 0, 255);
+
+    } else {
+      // off
+      motorDriver.drive(0, 0 , 0);
+    }
+
+}
+#endif
+
+void loop() {
+
+  int currentTime = millis() - loopStartTime;
+  
+  ///////////  Don't change code above here! ////////////////////
+  // write code here to make the robot fire its motors in the sequence specified in the lab manual 
+  // the currentTime variable contains the number of ms since the robot was turned on 
+  // The motorDriver.drive function takes in 3 inputs arguments motorA_power, motorB_power, motorC_power: 
+  //       void motorDriver.drive(int motorA_power,int motorB_power,int motorC_power); 
+  // the value of motorX_power can range from -255 to 255, and sets the PWM applied to the motor 
+  // The following example will turn on motor B for four seconds between seconds 4 and 8 
+
+  // Example Code
+  // if (currentTime > 4000 && currentTime <8000) {
+  //   motorDriver.drive(0,120,0);
+  // } else {
+  //   motorDriver.drive(0,0,0);
+  // }
 
   // DONT CHANGE CODE BELOW THIS LINE 
   // --------------------------------------------------------------------------
 
+  if (TEST) {
+    motorTest();
+  } else {
+    tankTest();
+  }
   
   if ( currentTime-printer.lastExecutionTime > LOOP_PERIOD ) {
     printer.lastExecutionTime = currentTime;
