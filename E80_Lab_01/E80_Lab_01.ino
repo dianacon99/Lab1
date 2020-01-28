@@ -171,14 +171,14 @@ void loop() {
   //   motorDriver.drive(0,0,0);
   // }
 
-  // DONT CHANGE CODE BELOW THIS LINE 
-  // --------------------------------------------------------------------------
-
   if (TEST) {
     motorTest();
   } else {
     tankTest();
   }
+
+  // DONT CHANGE CODE BELOW THIS LINE 
+  // --------------------------------------------------------------------------
   
   if ( currentTime-printer.lastExecutionTime > LOOP_PERIOD ) {
     printer.lastExecutionTime = currentTime;
